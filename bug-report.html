@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TestersAI Bug Detection Report - AI STORE</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0d1117; color: #e6edf3; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.6; }
+  .container { max-width: 1040px; margin: 0 auto; padding: 40px 24px; }
+  .header { text-align: center; padding: 40px 0 30px; border-bottom: 1px solid #30363d; }
+  .header .brand { font-size: 14px; color: #8b949e; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .header h1 { font-size: 28px; color: #f0f6fc; margin-bottom: 4px; }
+  .header h2 { font-size: 16px; color: #8b949e; font-weight: 400; margin-bottom: 16px; }
+  .header .meta { display: flex; justify-content: center; gap: 32px; font-size: 13px; color: #8b949e; flex-wrap: wrap; }
+  .nav-links { display: flex; justify-content: center; gap: 16px; margin-top: 16px; }
+  .nav-links a { color: #58a6ff; text-decoration: none; font-size: 13px; padding: 6px 14px; border: 1px solid #30363d; border-radius: 6px; transition: all 0.2s; }
+  .nav-links a:hover { background: #161b22; border-color: #58a6ff; }
+
+  /* Stats */
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 32px 0; }
+  .stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px; text-align: center; }
+  .stat-card .stat-label { font-size: 12px; color: #8b949e; margin-bottom: 6px; }
+  .stat-card .stat-value { font-size: 32px; font-weight: 700; }
+  .stat-total .stat-value { color: #f0f6fc; }
+  .stat-critical .stat-value { color: #f85149; }
+  .stat-major .stat-value { color: #d29922; }
+  .stat-minor .stat-value { color: #58a6ff; }
+  .stat-info .stat-value { color: #8b949e; }
+
+  /* Severity bar */
+  .severity-bar { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px 24px; margin: 24px 0; }
+  .severity-bar h3 { font-size: 15px; color: #f0f6fc; margin-bottom: 12px; }
+  .bar-track { height: 10px; background: #21262d; border-radius: 5px; overflow: hidden; display: flex; }
+  .bar-critical { background: #f85149; }
+  .bar-major { background: #d29922; }
+  .bar-minor { background: #58a6ff; }
+  .bar-info { background: #484f58; }
+  .bar-legend { display: flex; gap: 20px; margin-top: 10px; font-size: 12px; color: #8b949e; flex-wrap: wrap; }
+  .bar-legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .bar-legend .leg-critical::before { background: #f85149; }
+  .bar-legend .leg-major::before { background: #d29922; }
+  .bar-legend .leg-minor::before { background: #58a6ff; }
+  .bar-legend .leg-info::before { background: #484f58; }
+
+  /* Page section */
+  .page-section { margin: 32px 0; }
+  .page-section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #21262d; }
+  .page-section-header .page-icon { width: 36px; height: 36px; border-radius: 8px; background: #1f6feb; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .page-section-header h3 { font-size: 18px; color: #f0f6fc; }
+  .page-section-header .page-url { font-size: 13px; color: #8b949e; font-weight: 400; }
+
+  /* Bug card */
+  .bug-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px 24px; margin-bottom: 12px; transition: border-color 0.2s; }
+  .bug-card:hover { border-color: #484f58; }
+  .bug-card-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+  .bug-id { font-size: 13px; color: #8b949e; font-weight: 600; min-width: 60px; padding-top: 2px; }
+  .bug-title { font-size: 15px; font-weight: 600; color: #f0f6fc; flex: 1; }
+  .severity-badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+  .sev-critical { background: #3d1214; color: #f85149; }
+  .sev-major { background: #332d00; color: #d29922; }
+  .sev-minor { background: #0c2d6b; color: #58a6ff; }
+  .sev-info { background: #21262d; color: #8b949e; }
+  .bug-meta { display: flex; gap: 16px; font-size: 12px; color: #8b949e; margin-bottom: 12px; flex-wrap: wrap; }
+  .bug-meta span { }
+  .bug-meta .tester { color: #bc8cff; }
+  .bug-detail { margin-bottom: 10px; }
+  .bug-detail h4 { font-size: 12px; color: #8b949e; margin-bottom: 4px; font-weight: 600; }
+  .bug-detail p { font-size: 13px; color: #c9d1d9; }
+  .bug-detail .code-inline { background: #0d1117; border: 1px solid #30363d; padding: 2px 6px; border-radius: 4px; font-family: 'SF Mono', Monaco, 'Cascadia Mono', monospace; font-size: 12px; color: #f0f6fc; }
+
+  /* Tags */
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tag { background: #1f2937; border: 1px solid #30363d; border-radius: 12px; padding: 2px 10px; font-size: 11px; color: #8b949e; }
+  .tag.func { border-color: #1f6feb; color: #58a6ff; }
+  .tag.ui { border-color: #8b949e; color: #c9d1d9; }
+  .tag.content { border-color: #238636; color: #3fb950; }
+  .tag.nav { border-color: #bc8cff; color: #d2a8ff; }
+  .tag.i18n { border-color: #d29922; color: #e3b341; }
+  .tag.a11y { border-color: #f778ba; color: #f778ba; }
+  .tag.seo { border-color: #3fb950; color: #56d364; }
+
+  .footer { text-align: center; padding: 40px 0; border-top: 1px solid #30363d; margin-top: 40px; }
+  .footer p { font-size: 12px; color: #8b949e; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">TestersAI</div>
+    <h1>Bug Detection Report</h1>
+    <h2>aistore.club/zh — AI 时代的 App Store</h2>
+    <div class="meta">
+      <span>URL: aistore.club/zh</span>
+      <span>日期: 2026-04-08</span>
+      <span>3 个页面测试</span>
+      <span>31 位专项测试 AI</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Persona Feedback 报告</a>
+      <a href="bug-report.html">Bug Detection 报告</a>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card stat-total">
+      <div class="stat-label">总计 Bug</div>
+      <div class="stat-value">14</div>
+    </div>
+    <div class="stat-card stat-critical">
+      <div class="stat-label">Critical</div>
+      <div class="stat-value">3</div>
+    </div>
+    <div class="stat-card stat-major">
+      <div class="stat-label">Major</div>
+      <div class="stat-value">6</div>
+    </div>
+    <div class="stat-card stat-minor">
+      <div class="stat-label">Minor</div>
+      <div class="stat-value">3</div>
+    </div>
+    <div class="stat-card stat-info">
+      <div class="stat-label">Info / 建议</div>
+      <div class="stat-value">2</div>
+    </div>
+  </div>
+
+  <!-- Severity bar -->
+  <div class="severity-bar">
+    <h3>Bug 严重度分布</h3>
+    <div class="bar-track">
+      <div class="bar-critical" style="width:21.4%"></div>
+      <div class="bar-major" style="width:42.9%"></div>
+      <div class="bar-minor" style="width:21.4%"></div>
+      <div class="bar-info" style="width:14.3%"></div>
+    </div>
+    <div class="bar-legend">
+      <span class="leg-critical">Critical (3) — 阻断性故障</span>
+      <span class="leg-major">Major (6) — 功能缺陷</span>
+      <span class="leg-minor">Minor (3) — 体验问题</span>
+      <span class="leg-info">Info (2) — 改进建议</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 首页 -->
+  <!-- ============================================================ -->
+  <div class="page-section">
+    <div class="page-section-header">
+      <div class="page-icon">01</div>
+      <div>
+        <h3>首页 <span class="page-url">aistore.club/zh</span></h3>
+      </div>
+    </div>
+
+    <!-- BUG-001 -->
+    <div class="bug-card">
+      <div class="bug-card-header">
+        <div class="bug-id">BUG-001</div>
+        <div class="bug-title">导航栏"基础指南"链接指向 404 页面</div>
+        <span class="severity-badge sev-critical">Critical</span>
+      </div>
+      <div class="bug-meta">
+        <span>页面: 首页 /zh（全局导航）</span>
+        <span>测试者: <span class="tester">Link Integrity Tester</span></span>
+      </div>
+      <div class="bug-detail">
+        <h4>复现步骤</h4>
+        <p>1. 打开 aistore.club/zh → 2. 点击顶部导航栏"基础指南" → 3. 页面返回 <span class="code-inline">{"error":{"code":"1214","message":"The requested resource was not found"}}</span></p>
+      </div>
+      <div class="bug-detail">
+        <h4>预期行为</h4>
+        <p>点击导航链接应加载对应的"基础指南"页面，展示教程/入门内容。</p>
+      </div>
+      <div class="bug-detail">
+        <h4>实际行为</h4>
+        <p>多个路径（/zh/basics, /zh/guides, /zh/guides/basics, /zh/tutorials, /zh/learn）全部返回 404。该功能页面似乎尚未上线，但导航入口已暴露给用户。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag nav">导航断链</span>
+        <span class="tag func">功能不可用</span>
+        <span class="tag content">内容缺失</span>
+      </div>
+    </div>
+
+    <!-- BUG-002 -->
+    <div class="bug-card">
+      <div class="bug-card-header">
+        <div class="bug-id">BUG-002</div>
+        <div class="bug-title">MCP 页面返回 404</div>
+        <span class="severity-badge sev-critical">Critical</span>
+      </div>
+      <div class="bug-meta">
+        <span>页面: /zh/mcp</span>
+        <span>测试者: <span class="tester">Link Integrity Tester</span></span>
+      </div>
+      <div class="bug-detail">
+        <h4>复现步骤</h4>
+        <p>1. 访问 aistore.club/zh/mcp → 2. 返回 <span class="code-inline">{"error":{"code":"1214","message":"The requested resource was not found"}}</span></p>
+      </div>
+      <div class="bug-detail">
+        <h4>预期行为</h4>
+        <p>MCP 是平台核心功能分类之一（首页明确提到 Skills、MCP、Agent 三类资源），应有对应的 MCP 浏览页面。</p>
+      </div>
+      <div class="bug-detail">
+        <h4>实际行为</h4>
+        <p>页面完全不可访问。首页宣传了 MCP 资源，但用户无法浏览 MCP 列表，属于功能承诺与实际交付的严重断层。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag nav">导航断链</span>
+        <span class="tag func">核心功能缺失</span>
+      </div>
+    </div>
+
+    <!-- BUG-003 -->
+    <div class="bug-card">
+      <div class="bug-card-header">
+        <div class="bug-id">BUG-003</div>
+        <div class="bug-title">首页 5 步流程使用模拟数据，无真实可交互内容</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="bug-meta">
+        <span>页面: 首页 /zh</span>
+        <span>测试者: <span class="tester">Content Accuracy Tester</span></span>
+      </div>
+      <div class="bug-detail">
+        <h4>复现步骤</h4>
+        <p>1. 滚动到首页"一个平台，覆盖 AI 使用的每一步"区域 → 2. 观察 5 个步骤（了解/发现/对比/部署/学习） → 3. 每步下方的 "System Interface Preview" 均为静态模拟截图 → 4. "对比 10+ 云厂商"、<span class="code-inline">RTX 4060 / 16GB / ¥3.2/hr</span> 是示例文字</p>
+      </div>
+      <div class="bug-detail">
+        <h4>预期行为</h4>
+        <p>每个步骤应可点击进入对应的真实内容页面，展示实际数据（如真实的模型对比表格、真实的云配置推荐）。</p>
+      </div>
+      <div class="bug-detail">
+        <h4>实际行为</h4>
+        <p>所有示意图都是 placeholder，用户无法获得任何实际价值。这会让访客认为网站是"半成品"。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag content">内容不完整</span>
+        <span class="tag ui">UI 占位符</span>
+      </div>
+    </div>
+
+    <!-- BUG-004 -->
+    <div class="bug-card">
+      <div class="bug-card-header">
+        <div class="bug-id">BUG-004</div>
+        <div class="bug-title">首页缺少搜索入口</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="bug-meta">
+        <span>页面: 首页 /zh</span>
+        <span>测试者: <span class="tester">Usability Tester</span></span>
+      </div>
+      <div class="bug-detail">
+        <h4>复现步骤</h4>
+        <p>1. 打开 aistore.club/zh → 2. 浏览首页 Hero 区及所有内容区 → 3. 无任何搜索框或搜索按钮 → 4. 必须手动导航到 /zh/skills 页面才能使用 ⌘K 搜索</p>
+      </div>
+      <div class="bug-detail">
+        <h4>预期行为</h4>
+        <p>作为"AI 时代的 App Store"，搜索应该是首页最核心的交互入口，类似于 App Store 首页顶部的搜索栏。</p>
+      </div>
+      <div class="bug-detail">
+        <h4>实际行为</h4>
+        <p>首页完全没有搜索入口，新用户无法通过搜索快速找到所需工具，必须理解站内导航结构才能发现搜索功能。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag func">核心交互缺失</span>
+        <span class="tag ui">UX 缺陷</span>
+      </div>
+    </div>
+
+    <!-- BUG-005 -->
+    <div class="bug-card">
+      <div class="bug-card-header">
+        <div class="bug-id">BUG-005</div>
+        <div class="bug-title">首页宣传口号与实际体验严重不符</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="bug-meta">
+        <span>页面: 首页 /zh</span>
+        <span>测试者: <span class="tester">Brand Consistency Tester</span></span>
+      </div>
+      <div class="bug-detail">
+        <h4>复现步骤</h4>
+        <p>1. 首页大标题宣称"AI 时代的 App Store" → 2. 副标题"消除技术壁垒，让 AI 开箱即用" → 3. 实际浏览发现：Skill/MCP/Agent 等技术术语对普通用户构成认知壁垒 → 4. 所有 Skill 描述为英文 → 5. 无场景化引导</p>
+      </div>
+      <div class="bug-detail">
+        <h4>预期行为</h4>
+        <p>口号承诺"开箱即用"和"消除技术壁垒"，实际体验应对所有层次用户友好。</p>
+      </div>
+      <div class="bug-detail">
+        <h4>实际行为</h4>
+        <p>网站实际面向开发者群体，非技术用户完全无法使用。App Store 的核心体验是"任何人都能找到想要的 App"，而 aistore 的实际体验更接近技术文档站。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag content">品牌承诺不符</span>
+        <span class="tag ui">用户体验</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- Skills 页面 -->
+  <!-- ============================================================ -->
+  <div class="page-section">
+    <div class="page-section-header">
+      <div class="page-icon">02</div>
+      <div>
+        <h3>Skills 页面 <span class="page-url">aistore.club/zh/skills</span></h3>
+      </div>
+    </div>
+
+    <!-- BUG-006 -->
+    <div class="bug-card">
+      <div class="bug-card-header">
+        <div class="bug-id">BUG-006</div>
+        <div class="bug-title">"热门搜索"标签区域为空</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="bug-meta">
+        <span>页面: /zh/skills</span>
+        <span>测试者: <span class="tester">UI Rendering Tester</span></span>
+      </div>
+      <div class="bug-detail">
+        <h4>复现步骤</h4>
+        <p>1. 打开 /zh/skills → 2. 在搜索栏下方找到 "热门搜索：" 文字 → 3. 后面没有任何标签或关键词</p>
+      </div>
+      <div class="bug-detail">
+        <h4>预期行为</h4>
+        <p>"热门搜索"区域应展示若干可点击的热门搜索标签，帮助用户快速发现热门 Skill。</p>
+      </div>
+      <div class="bug-detail">
+        <h4>实际行为</h4>
+        <p>显示"热门搜索："标签文字，但后面完全为空。这可能是数据接口未返回数据或前端渲染逻辑有 bug。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag func">功能异常</span>
+        <span class="tag ui">空内容</span>
+      </div>
+    </div>
+
+    <!-- BUG-007 -->
+    <div class="bug-card">
+      <div class="bug-card-header">
+        <div class="bug-id">BUG-007</div>
+        <div class="bug-title">中文站 Skill 描述全部为英文</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="bug-meta">
+        <span>页面: /zh/skills</span>
+        <span>测试者: <span class="tester">i18n / Localization Tester</span></span>
+      </div>
+      <div class="bug-detail">
+        <h4>复现步骤</h4>
+        <p>1. 访问 aistore.club/zh/skills（中文站） → 2. 浏览 Skill 列表 → 3. 所有 Skill 标题（如"自我改进智能体"、"技能发现"等）虽为中文，但详细描述、标签均为英文 → 4. 英文描述如"Record learning processes, errors, and corrections..."对中文用户不友好</p>
+      </div>
+      <div class="bug-detail">
+        <h4>预期行为</h4>
+        <p>中文站（/zh）的 Skill 列表应提供中文标题、中文简介、中文标签。</p>
+      </div>
+      <div class="bug-detail">
+        <h4>实际行为</h4>
+        <p>Skill 标题已被翻译为中文，但描述文本和分类标签仍为英文原文，体验割裂。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag i18n">国际化缺陷</span>
+        <span class="tag content">内容未翻译</span>
+      </div>
+    </div>
+
+    <!-- BUG-008 -->
+    <div class="bug-card">
+      <div class="bug-card-header">
+        <div class="bug-id">BUG-008</div>
+        <div class="bug-title">缺少高级筛选能力</div>
+        <span class="severity-badge sev-minor">Minor</span>
+      </div>
+      <div class="bug-meta">
+        <span>页面: /zh/skills</span>
+        <span>测试者: <span class="tester">Usability Tester</span></span>
+      </div>
+      <div class="bug-detail">
+        <h4>复现步骤</h4>
+        <p>1. 打开 /zh/skills → 2. 观察筛选选项 → 3. 仅有分类标签（命令行工具、AI 智能体、搜索与检索等） → 4. 无法按平台（Claude Code / Cursor / Copilot）、难度等级、语言筛选</p>
+      </div>
+      <div class="bug-detail">
+        <h4>预期行为</h4>
+        <p>作为"App Store"式的平台，应提供多维筛选：平台类型、难度等级（新手/进阶）、语言（中文/英文）、安装量区间等。</p>
+      </div>
+      <div class="bug-detail">
+        <h4>实际行为</h4>
+        <p>仅支持分类浏览和关键词搜索，1000+ 个 Skill 没有有效的过滤手段。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag func">筛选不足</span>
+        <span class="tag ui">UX 改进</span>
+      </div>
+    </div>
+
+    <!-- BUG-009 -->
+    <div class="bug-card">
+      <div class="bug-card-header">
+        <div class="bug-id">BUG-009</div>
+        <div class="bug-title">导航栏"AI 工具"与"Skill"入口定位模糊</div>
+        <span class="severity-badge sev-minor">Minor</span>
+      </div>
+      <div class="bug-meta">
+        <span>页面: 全局导航</span>
+        <span>测试者: <span class="tester">Information Architecture Tester</span></span>
+      </div>
+      <div class="bug-detail">
+        <h4>复现步骤</h4>
+        <p>1. 观察导航栏：首页、AI工具、Skill、大模型、AI百科、基础指南、基础设施、消息渠道 → 2. 分别点击"AI工具"和"Skill" → 3. "AI工具"展示 ChatGPT/Midjourney 等成品工具 → 4. "Skill"展示 Claude Code 的扩展技能模块 → 5. 两者的区别对普通用户不清晰</p>
+      </div>
+      <div class="bug-detail">
+        <h4>预期行为</h4>
+        <p>导航分类应有清晰的定位说明或 tooltip，帮助用户理解"AI 工具"和"Skill"的区别。</p>
+      </div>
+      <div class="bug-detail">
+        <h4>实际行为</h4>
+        <p>两个入口无说明，新用户无法区分。建议增加分类说明或合并入口。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag nav">导航不清</span>
+        <span class="tag ui">信息架构</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- Wiki 页面 -->
+  <!-- ============================================================ -->
+  <div class="page-section">
+    <div class="page-section-header">
+      <div class="page-icon">03</div>
+      <div>
+        <h3>Wiki 页面 <span class="page-url">aistore.club/zh/wiki</span></h3>
+      </div>
+    </div>
+
+    <!-- BUG-010 -->
+    <div class="bug-card">
+      <div class="bug-card-header">
+        <div class="bug-id">BUG-010</div>
+        <div class="bug-title">Wiki 页面多处内容加载失败</div>
+        <span class="severity-badge sev-critical">Critical</span>
+      </div>
+      <div class="bug-meta">
+        <span>页面: /zh/wiki</span>
+        <span>测试者: <span class="tester">API Integration Tester</span></span>
+      </div>
+      <div class="bug-detail">
+        <h4>复现步骤</h4>
+        <p>1. 打开 aistore.club/zh/wiki → 2. 页面顶部显示"文章加载失败，请稍后重试"（出现 2 次） → 3. "快捷标签"区域也显示"文章加载失败，请稍后重试"</p>
+      </div>
+      <div class="bug-detail">
+        <h4>预期行为</h4>
+        <p>Wiki 页面应正常加载文章列表和快捷标签内容。</p>
+      </div>
+      <div class="bug-detail">
+        <h4>实际行为</h4>
+        <p>页面主体内容（文章列表 + 快捷标签）全部加载失败，仅底部术语预览和播客列表正常显示。可能原因是后端 API 调用失败或数据源为空。</p>
+      </div>
+      <div class="bug-detail">
+        <h4>错误信息</h4>
+        <p><span class="code-inline">文章加载失败，请稍后重试。</span> × 2（文章区域 + 快捷标签区域）</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag func">内容加载失败</span>
+        <span class="tag ui">错误状态显示</span>
+      </div>
+    </div>
+
+    <!-- BUG-011 -->
+    <div class="bug-card">
+      <div class="bug-card-header">
+        <div class="bug-id">BUG-011</div>
+        <div class="bug-title">Wiki 快捷标签为空</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="bug-meta">
+        <span>页面: /zh/wiki</span>
+        <span>测试者: <span class="tester">UI Rendering Tester</span></span>
+      </div>
+      <div class="bug-detail">
+        <h4>复现步骤</h4>
+        <p>1. 打开 /zh/wiki → 2. 找到"快捷标签"区域 → 3. 标签名称"快捷标签"可见，但下方无任何标签内容</p>
+      </div>
+      <div class="bug-detail">
+        <h4>预期行为</h4>
+        <p>应展示可点击的分类标签，帮助用户按主题浏览百科内容。</p>
+      </div>
+      <div class="bug-detail">
+        <h4>实际行为</h4>
+        <p>标签区域为空，同时显示"文章加载失败"错误提示。可能与 BUG-010 同源。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag func">功能异常</span>
+        <span class="tag ui">空内容</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 全站问题 -->
+  <!-- ============================================================ -->
+  <div class="page-section">
+    <div class="page-section-header">
+      <div class="page-icon">*&ensp;</div>
+      <div>
+        <h3>全站性问题</h3>
+      </div>
+    </div>
+
+    <!-- BUG-012 -->
+    <div class="bug-card">
+      <div class="bug-card-header">
+        <div class="bug-id">BUG-012</div>
+        <div class="bug-title">无亮色模式切换选项</div>
+        <span class="severity-badge sev-minor">Minor</span>
+      </div>
+      <div class="bug-meta">
+        <span>页面: 全站</span>
+        <span>测试者: <span class="tester">Accessibility Tester</span></span>
+      </div>
+      <div class="bug-detail">
+        <h4>复现步骤</h4>
+        <p>1. 浏览全站任意页面 → 2. 查找主题切换选项（日/夜模式） → 3. 不存在任何切换入口</p>
+      </div>
+      <div class="bug-detail">
+        <h4>预期行为</h4>
+        <p>提供亮色/暗色模式切换。暗色主题虽适合技术用户，但对非技术用户（如教师、商户）在明亮环境下阅读不适。也影响视力不佳用户的可访问性。</p>
+      </div>
+      <div class="bug-detail">
+        <h4>实际行为</h4>
+        <p>仅有暗色主题，无法切换。对于定位为"AI 时代的 App Store"的平台，应考虑更广泛的用户群。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag a11y">可访问性</span>
+        <span class="tag ui">主题设置</span>
+      </div>
+    </div>
+
+    <!-- BUG-013 -->
+    <div class="bug-card">
+      <div class="bug-card-header">
+        <div class="bug-id">BUG-013</div>
+        <div class="bug-title">无法调节字体大小</div>
+        <span class="severity-badge sev-info">Info</span>
+      </div>
+      <div class="bug-meta">
+        <span>页面: 全站</span>
+        <span>测试者: <span class="tester">Accessibility Tester</span></span>
+      </div>
+      <div class="bug-detail">
+        <h4>复现步骤</h4>
+        <p>1. 浏览全站 → 2. 查找字体大小设置 → 3. 不存在</p>
+      </div>
+      <div class="bug-detail">
+        <h4>说明</h4>
+        <p>对于年龄较大的用户（如 45+ 的企业采购决策者、55+ 的个体商户），当前字体偏小。建议增加字体大小调节功能或 A+/- 按钮。这是可访问性（WCAG 1.4.4 Resize Text）的推荐实践。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag a11y">可访问性</span>
+        <span class="tag ui">可配置性</span>
+      </div>
+    </div>
+
+    <!-- BUG-014 -->
+    <div class="bug-card">
+      <div class="bug-card-header">
+        <div class="bug-id">BUG-014</div>
+        <div class="bug-title">"大模型"页面入口存在但功能不明</div>
+        <span class="severity-badge sev-info">Info</span>
+      </div>
+      <div class="bug-meta">
+        <span>页面: 导航栏</span>
+        <span>测试者: <span class="tester">Information Architecture Tester</span></span>
+      </div>
+      <div class="bug-detail">
+        <h4>说明</h4>
+        <p>导航栏包含"大模型"入口，但与"AI工具"、"Skill"的定位关系不清晰。首页的 01 步骤"了解 — 选对大模型"提到"覆盖 20+ 主流模型"，但实际点击后的内容组织方式与 AI Tools 页面有重叠。建议明确各入口的内容定位，避免用户困惑。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag nav">导航优化</span>
+        <span class="tag ui">信息架构</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Generated by TestersAI &bull; Bug Detection Report &bull; 2026-04-08</p>
+    <p style="margin-top:4px;">Powered by 31 Specialized AI Testers &bull; Mode 1: Bug Detection</p>
+  </div>
+
+</div>
+</body>
+</html>
