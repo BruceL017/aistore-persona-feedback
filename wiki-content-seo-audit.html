@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content & SEO Audit - AISTORE AI Wiki</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            padding: 24px;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+            padding: 32px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            background: linear-gradient(45deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        h2 { color: #38bdf8; margin-bottom: 12px; font-size: 1.4em; }
+        .meta-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .meta-card {
+            background: rgba(255,255,255,0.05);
+            padding: 14px;
+            border-radius: 8px;
+            border-left: 4px solid #38bdf8;
+        }
+        .summary {
+            background: rgba(30, 41, 59, 0.7);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .stat-box {
+            background: rgba(255,255,255,0.05);
+            padding: 18px 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number { font-size: 2.2em; font-weight: bold; color: #38bdf8; }
+        .issue-card {
+            background: rgba(30, 41, 59, 0.7);
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            border-left: 5px solid;
+        }
+        .issue-card.critical { border-left-color: #f87171; }
+        .issue-card.high { border-left-color: #fbbf24; }
+        .issue-card.medium { border-left-color: #facc15; }
+        .issue-card.low { border-left-color: #60a5fa; }
+        .issue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .issue-title { font-size: 1.2em; flex: 1; color: #f8fafc; }
+        .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+        .badge {
+            padding: 4px 10px;
+            border-radius: 14px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        .badge-priority { background: #f87171; color: #fff; }
+        .badge-priority.medium { background: #facc15; color: #0f172a; }
+        .badge-priority.low { background: #60a5fa; color: #fff; }
+        .badge-confidence { background: #38bdf8; color: #0f172a; }
+        .badge-category { background: rgba(255,255,255,0.1); color: #e2e8a0; border: 1px solid rgba(255,255,255,0.15); }
+        .issue-section { margin: 14px 0; }
+        .issue-section h4 { color: #38bdf8; margin-bottom: 6px; font-size: 0.95em; text-transform: uppercase; letter-spacing: 0.3px; }
+        .issue-section p { color: #cbd5e1; line-height: 1.7; }
+        .fix-block {
+            background: rgba(15, 23, 42, 0.8);
+            padding: 14px;
+            border-radius: 6px;
+            overflow-x: auto;
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .recommendations {
+            background: rgba(30, 41, 59, 0.7);
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 24px;
+        }
+        .recommendations ol { margin-left: 20px; margin-top: 12px; }
+        .recommendations li { margin: 8px 0; padding-left: 8px; color: #cbd5e1; }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            opacity: 0.5;
+            font-size: 0.85em;
+            padding: 16px;
+        }
+        @media (max-width: 640px) {
+            h1 { font-size: 1.6em; }
+            .issue-header { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Content & SEO Audit</h1>
+            <p style="opacity:0.8">AISTORE AI Wiki (/zh/wiki)</p>
+            <div class="meta-info">
+                <div class="meta-card"><strong>URL:</strong><br>https://aistore.club/zh/wiki</div>
+                <div class="meta-card"><strong>Page Type:</strong><br>Content Hub / Wiki Homepage</div>
+                <div class="meta-card"><strong>Date:</strong><br>2026-04-10</div>
+                <div class="meta-card"><strong>Issues Found:</strong><br>10</div>
+            </div>
+        </header>
+
+        <div class="summary">
+            <h2>Summary</h2>
+            <div class="stats-grid">
+                <div class="stat-box"><div class="stat-number">2</div><div>Critical</div></div>
+                <div class="stat-box"><div class="stat-number">4</div><div>High</div></div>
+                <div class="stat-box"><div class="stat-number">4</div><div>Medium</div></div>
+                <div class="stat-box"><div class="stat-number">0</div><div>Low</div></div>
+            </div>
+        </div>
+
+        <h2 style="margin-bottom:18px">Findings</h2>
+
+        <div class="issue-card critical">
+            <div class="issue-header">
+                <h3 class="issue-title">1. robots.txt 全站屏蔽搜索引擎爬行</h3>
+                <div class="badges">
+                    <span class="badge badge-priority">Priority: 10/10</span>
+                    <span class="badge badge-confidence">Confidence: 10/10</span>
+                    <span class="badge badge-category">Technical SEO</span>
+                </div>
+            </div>
+            <div class="issue-section">
+                <h4>Why this matters</h4>
+                <p>robots.txt 中设置为 User-Agent: * Disallow: /，这意味着所有搜索引擎爬虫被完全禁止访问整个网站。无论页面内容多么优质，都不会被 Google、Bing 等搜索引擎索引， organic 流量为 0。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Suggested fix</h4>
+                <p>立即修改 robots.txt，移除 Disallow: /。至少应允许 /zh/wiki、/zh/skills、/en/wiki 等核心页面。如果站点仍在开发中，考虑只对特定测试路径使用 noindex，而非全局屏蔽 robots。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Fix Prompt</h4>
+                <pre class="fix-block">修改 public/robots.txt：
+User-Agent: *
+Allow: /
+Sitemap: https://aistore.club/sitemap.xml</pre>
+            </div>
+        </div>
+
+        <div class="issue-card critical">
+            <div class="issue-header">
+                <h3 class="issue-title">2. 页面完全缺失 H1 和 H2 Heading</h3>
+                <div class="badges">
+                    <span class="badge badge-priority">Priority: 9/10</span>
+                    <span class="badge badge-confidence">Confidence: 10/10</span>
+                    <span class="badge badge-category">On-Page SEO</span>
+                </div>
+            </div>
+            <div class="issue-section">
+                <h4>Why this matters</h4>
+                <p>从 HTML 源码分析，页面没有任何 H1 或 H2 标签。所有板块标题直接从 H3 开始（如"实时快讯"、"教程精选"）。搜索引擎严重依赖 H1 来理解页面主题，缺失 H1 会大幅削弱关键词相关性和排名能力。同时，WCAG 也要求每个页面有且仅有一个 H1。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Suggested fix</h4>
+                <p>在 Hero 区域添加一个描述性的 H1（如"AI Wiki - AI 知识库、教程与术语百科"），将现有的 H3 板块标题提升为 H2，文章/视频标题使用 H3/H4，构建正确的 H1 → H2 → H3 → H4 层级。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Fix Prompt</h4>
+                <pre class="fix-block">1. 在页面顶部 Hero 区添加：&lt;h1&gt;AI Wiki - 一站式 AI 知识库、教程与术语百科&lt;/h1&gt;
+2. 将所有板块标题（实时快讯/深度好文/教程精选/术语百科/优质视频/AI 播客）从 &lt;h3&gt; 改为 &lt;h2&gt;
+3. 保持文章卡片标题为 &lt;h3&gt;，确保层级不跳跃</pre>
+            </div>
+        </div>
+
+        <div class="issue-card high">
+            <div class="issue-header">
+                <h3 class="issue-title">3. 内容卡片使用 button 而非 a 标签，内部链接几乎为零</h3>
+                <div class="badges">
+                    <span class="badge badge-priority">Priority: 8/10</span>
+                    <span class="badge badge-confidence">Confidence: 10/10</span>
+                    <span class="badge badge-category">SEO + Accessibility</span>
+                </div>
+            </div>
+            <div class="issue-section">
+                <h4>Why this matters</h4>
+                <p>页面中所有文章、视频、播客卡片在静态 HTML 中都是 &lt;button&gt; 元素，而非 &lt;a href="..."&gt; 链接。整页仅有 2 个指向 wiki 的内部链接（/zh/wiki 导航本身 和 /en/wiki）。Google 爬虫无法通过 button 发现或传递权重到子页面，这意味着所有详情页都是"孤岛页面"，无法被自然排名。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Suggested fix</h4>
+                <p>将所有可点击的内容卡片从 &lt;button&gt; 改为 &lt;a href="/zh/wiki/[slug]"&gt;，确保每个文章/视频/术语都有真实的 HTML 链接。如果必须使用 button 做客户端路由，应在内部包裹 &lt;a&gt; 标签或提供 sitemap 作为补救。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Fix Prompt</h4>
+                <pre class="fix-block">将内容卡片的根元素从：
+&lt;button class="..." onClick={...}&gt;...&lt;/button&gt;
+改为：
+&lt;a href="/zh/wiki/openclaw-intro" class="..."&gt;...&lt;/a&gt;</pre>
+            </div>
+        </div>
+
+        <div class="issue-card high">
+            <div class="issue-header">
+                <h3 class="issue-title">4. 静态 HTML 中无子页面/详情页链接可被爬取</h3>
+                <div class="badges">
+                    <span class="badge badge-priority">Priority: 8/10</span>
+                    <span class="badge badge-confidence">Confidence: 9/10</span>
+                    <span class="badge badge-category">Technical SEO</span>
+                </div>
+            </div>
+            <div class="issue-section">
+                <h4>Why this matters</h4>
+                <p>页面虽有"查看全部"、"查看详情"等交互按钮，但静态 HTML 中没有任何 /zh/wiki/[slug] 形式的子页面 URL。即使 robots.txt 被修复，爬虫也无法发现这些详情页，失去了大量长尾关键词的流量入口（如教程、术语解释、播客内容）。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Suggested fix</h4>
+                <p>为每个内容项生成独立详情页（/zh/wiki/[slug]），并在列表页中暴露真实的链接。如果详情页尚不存在，至少应提供"查看全部"按钮指向一个可索引的列表页（如 /zh/wiki/tutorials）。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Fix Prompt</h4>
+                <pre class="fix-block">1. 为每篇文章/术语/视频创建独立详情页 /zh/wiki/{slug}
+2. 在列表页中将卡片链接到对应详情页
+3. 生成 XML Sitemap 并提交到 Google Search Console</pre>
+            </div>
+        </div>
+
+        <div class="issue-card high">
+            <div class="issue-header">
+                <h3 class="issue-title">5. Meta Description 过短且缺少 CTA</h3>
+                <div class="badges">
+                    <span class="badge badge-priority">Priority: 7/10</span>
+                    <span class="badge badge-confidence">Confidence: 10/10</span>
+                    <span class="badge badge-category">On-Page SEO</span>
+                </div>
+            </div>
+            <div class="issue-section">
+                <h4>Why this matters</h4>
+                <p>当前 Meta Description 为"AI Wiki 是一站式 AI 知识聚合平台，汇聚实时快讯、深度好文、实战教程、术语百科、精选视频与 AI 播客，帮助你高效掌握大模型与人工智能前沿动态。"约 67 个中文字符，虽然语意完整，但没有明确的行动召唤（CTA）或价值承诺，在 SERP 中的点击率会受到影响。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Suggested fix</h4>
+                <p>重写 Meta Description，控制在 120-150 个字符之间，加入明确的用户利益和 CTA，如"免费查看最新 AI 教程、术语百科与好物播客"等。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Fix Prompt</h4>
+                <pre class="fix-block">&lt;meta name="description" content="AI Wiki 汇聚 AI 实时快讯、实战教程、术语百科与精选播客。免费查看最新大模型动态、RAG 实战与 LoRA 微调指南。&gt;</pre>
+            </div>
+        </div>
+
+        <div class="issue-card high">
+            <div class="issue-header">
+                <h3 class="issue-title">6. "深度好文"板块在静态 HTML 中没有展示任何文章标题</h3>
+                <div class="badges">
+                    <span class="badge badge-priority">Priority: 7/10</span>
+                    <span class="badge badge-confidence">Confidence: 8/10</span>
+                    <span class="badge badge-category">Content Quality</span>
+                </div>
+            </div>
+            <div class="issue-section">
+                <h4>Why this matters</h4>
+                <p>从 HTML 源码中可以看到"深度好文"的 H3 标题和"查看全部"按钮，但该板块下方没有任何实际的文章标题或摘要。这意味着首屏下方存在内容空白，用户和爬虫都看不到该板块的任何价值，浪费了重要的页面空间。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Suggested fix</h4>
+                <p>在该板块中至少展示 3-4 篇精选文章的卡片（包含标题、摘要和链接），或者如果文章数据需要客户端获取，应进行服务端渲染（SSR）以确保 HTML 中可见。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Fix Prompt</h4>
+                <pre class="fix-block">将"深度好文"板块的数据改为服务端渲染：
+在 HTML 中直接输出 4 篇文章卡片，每张卡片包含：
+- 封面图（带 alt）
+- 文章标题（&lt;h3&gt;）
+- 1-2 行摘要
+- &lt;a href="/zh/wiki/articles/{slug}"&gt;链接&lt;/a&gt;</pre>
+            </div>
+        </div>
+
+        <div class="issue-card medium">
+            <div class="issue-header">
+                <h3 class="issue-title">7. 大量"查看全部"按钮缺少上下文描述</h3>
+                <div class="badges">
+                    <span class="badge badge-priority medium">Priority: 5/10</span>
+                    <span class="badge badge-confidence">Confidence: 9/10</span>
+                    <span class="badge badge-category">Accessibility + CRO</span>
+                </div>
+            </div>
+            <div class="issue-section">
+                <h4>Why this matters</h4>
+                <p>页面中使用了多个"查看全部"按钮，文案完全相同。对于屏幕阅读器用户，这些按钮缺少 aria-label 或通过上下文说明它们分别指向"查看全部快讯"、"查看全部教程"等，导致可访问性差，也不利于转化率优化。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Suggested fix</h4>
+                <p>为每个"查看全部"按钮添加描述性的 aria-label（如 aria-label="查看全部实时快讯"），或将按钮文案改为更具体的文字，如"查看全部快讯"、"浏览所有教程"。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Fix Prompt</h4>
+                <pre class="fix-block">&lt;button aria-label="查看全部实时快讯"&gt;查看全部&lt;/button&gt;
+或
+&lt;button&gt;查看全部快讯&lt;/button&gt;</pre>
+            </div>
+        </div>
+
+        <div class="issue-card medium">
+            <div class="issue-header">
+                <h3 class="issue-title">8. 页面 Hero 区域缺少即时的社会证明和信任信号</h3>
+                <div class="badges">
+                    <span class="badge badge-priority medium">Priority: 5/10</span>
+                    <span class="badge badge-confidence">Confidence: 8/10</span>
+                    <span class="badge badge-category">CRO</span>
+                </div>
+            </div>
+            <div class="issue-section">
+                <h4>Why this matters</h4>
+                <p>Hero 区域只有"AI Wiki 知识库"和简介文案，没有展示平台的规模背书（如"1000+ AI 工具"、"50+ 实战教程"、"每日更新"等）。对于首次访问的用户，缺少立即建立信任的信号，降低了进一步探索的意愿。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Suggested fix</h4>
+                <p>在 Hero 区添加 3-4 个核心数据指标或信任徽章，例如"覆盖 50+ AI 术语"、"每周 10+ 精选教程"、"中英文双语内容"等，快速传达平台价值。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Fix Prompt</h4>
+                <pre class="fix-block">在 Hero 区域添加 stats 栏：
+&lt;div class="hero-stats"&gt;
+  &lt;span&gt;50+ 实战教程&lt;/span&gt;
+  &lt;span&gt;100+ AI 术语百科&lt;/span&gt;
+  &lt;span&gt;每周更新&lt;/span&gt;
+&lt;/div&gt;</pre>
+            </div>
+        </div>
+
+        <div class="issue-card medium">
+            <div class="issue-header">
+                <h3 class="issue-title">9. 视频与播客内容缺少结构化数据标记</h3>
+                <div class="badges">
+                    <span class="badge badge-priority medium">Priority: 4/10</span>
+                    <span class="badge badge-confidence">Confidence: 9/10</span>
+                    <span class="badge badge-category">Schema Markup</span>
+                </div>
+            </div>
+            <div class="issue-section">
+                <h4>Why this matters</h4>
+                <p>页面中的视频（如 Karpathy GPT-2、3Blue1Brown）和播客（Lex Fridman Podcast）目前只有基本的 CollectionPage Schema。缺少 VideoObject 和 PodcastEpisode Schema 意味着无法获得 Google 视频/播客富媒体结果（Rich Results），错失在搜索结果中展示缩略图、时长、发布者等信息的机会。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Suggested fix</h4>
+                <p>为每个视频卡片添加 VideoObject JSON-LD，为每个播客卡片添加 PodcastEpisode Schema，包含 name、description、thumbnailUrl、uploadDate、duration 等字段。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Fix Prompt</h4>
+                <pre class="fix-block">为每个视频项注入 VideoObject schema：
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "Andrej Karpathy：从零手写 GPT-2",
+  "description": "...",
+  "thumbnailUrl": "...",
+  "uploadDate": "2026-01-15"
+}</pre>
+            </div>
+        </div>
+
+        <div class="issue-card medium">
+            <div class="issue-header">
+                <h3 class="issue-title">10. 缺少基础安全响应头</h3>
+                <div class="badges">
+                    <span class="badge badge-priority medium">Priority: 4/10</span>
+                    <span class="badge badge-confidence">Confidence: 9/10</span>
+                    <span class="badge badge-category">Technical SEO</span>
+                </div>
+            </div>
+            <div class="issue-section">
+                <h4>Why this matters</h4>
+                <p>HTTP 响应头中缺少 Strict-Transport-Security (HSTS)、X-Content-Type-Options、X-Frame-Options 等基础安全头。虽然站点使用 HTTPS，但缺少 HSTS 意味着浏览器不会强制升级到 HTTPS，存在降级攻击风险。同时，Google 将网站安全性视为排名信号之一，完整的安全头配置有助于提升站点可信度。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Suggested fix</h4>
+                <p>在 Web 服务器或 CDN（Cloudflare）层面配置以下响应头：Strict-Transport-Security (max-age 至少 31536000)、X-Content-Type-Options: nosniff、X-Frame-Options: DENY 或 Content-Security-Policy frame-ancestors。</p>
+            </div>
+            <div class="issue-section">
+                <h4>Fix Prompt</h4>
+                <pre class="fix-block">在 Cloudflare / Nginx / Next.js 配置中添加：
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Referrer-Policy: strict-origin-when-cross-origin</pre>
+            </div>
+        </div>
+
+        <div class="recommendations">
+            <h2>Top Recommendations</h2>
+            <ol>
+                <li><strong>立即修复 robots.txt 屏蔽</strong>：这是所有 SEO 工作的前提，否则任何优化都不会被搜索引擎看到。</li>
+                <li><strong>重构 Heading 层级并添加 H1</strong>：将 H3 板块标题提升为 H2，在 Hero 区补充 H1，建立清晰的信息架构。</li>
+                <li><strong>将所有内容卡片改为真实链接</strong>：用 &lt;a&gt; 标签替换 &lt;button&gt;，让搜索引擎发现和传递权重到详情页。</li>
+            </ol>
+        </div>
+
+        <footer>
+            <p>Generated by Claude · Content & SEO Auditor Skill</p>
+        </footer>
+    </div>
+</body>
+</html>
