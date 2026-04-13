@@ -1,180 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skills-Pages Audit - AISTORE Skills</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #e2e8f0;
-            padding: 24px;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-        .container { max-width: 1100px; margin: 0 auto; }
-        header {
-            background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
-            padding: 32px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-        }
-        h1 {
-            font-size: 2.2em;
-            margin-bottom: 8px;
-            background: linear-gradient(45deg, #38bdf8, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        h2 { color: #38bdf8; margin-bottom: 12px; font-size: 1.4em; }
-        .meta-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-        }
-        .meta-card {
-            background: rgba(255,255,255,0.05);
-            padding: 14px;
-            border-radius: 8px;
-            border-left: 4px solid #38bdf8;
-        }
-        .summary {
-            background: rgba(30, 41, 59, 0.7);
-            padding: 24px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-        }
-        .stat-box {
-            background: rgba(255,255,255,0.05);
-            padding: 18px 12px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .stat-number { font-size: 2.2em; font-weight: bold; color: #38bdf8; }
-        .issue-card {
-            background: rgba(30, 41, 59, 0.7);
-            padding: 22px;
-            border-radius: 12px;
-            margin-bottom: 18px;
-            border-left: 5px solid;
-        }
-        .issue-card.critical { border-left-color: #f87171; }
-        .issue-card.high { border-left-color: #fbbf24; }
-        .issue-card.medium { border-left-color: #facc15; }
-        .issue-card.low { border-left-color: #60a5fa; }
-        .issue-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-        .issue-title { font-size: 1.2em; flex: 1; color: #f8fafc; }
-        .badges { display: flex; gap: 8px; flex-wrap: wrap; }
-        .badge {
-            padding: 4px 10px;
-            border-radius: 14px;
-            font-size: 0.8em;
-            font-weight: 600;
-        }
-        .badge-priority { background: #f87171; color: #fff; }
-        .badge-priority.medium { background: #facc15; color: #0f172a; }
-        .badge-priority.low { background: #60a5fa; color: #fff; }
-        .badge-confidence { background: #38bdf8; color: #0f172a; }
-        .badge-category { background: rgba(255,255,255,0.1); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15); }
-        .issue-section { margin: 14px 0; }
-        .issue-section h4 { color: #38bdf8; margin-bottom: 6px; font-size: 0.95em; text-transform: uppercase; letter-spacing: 0.3px; }
-        .issue-section p { color: #cbd5e1; line-height: 1.7; }
-        .fix-block {
-            background: rgba(15, 23, 42, 0.8);
-            padding: 14px;
-            border-radius: 6px;
-            overflow-x: auto;
-            color: #38bdf8;
-            border: 1px solid rgba(56, 189, 248, 0.25);
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        .recommendations {
-            background: rgba(30, 41, 59, 0.7);
-            padding: 24px;
-            border-radius: 12px;
-            margin-top: 24px;
-        }
-        .recommendations ol { margin-left: 20px; margin-top: 12px; }
-        .recommendations li { margin: 8px 0; padding-left: 8px; color: #cbd5e1; }
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            opacity: 0.5;
-            font-size: 0.85em;
-            padding: 16px;
-        }
-        @media (max-width: 640px) {
-            h1 { font-size: 1.6em; }
-            .issue-header { flex-direction: column; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TestersAI Skills-Pages Audit - AI STORE</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0d1117; color: #e6edf3; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.6; }
+  .container { max-width: 1040px; margin: 0 auto; padding: 40px 24px; }
+  .header { text-align: center; padding: 40px 0 30px; border-bottom: 1px solid #30363d; }
+  .header .brand { font-size: 14px; color: #8b949e; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .header h1 { font-size: 28px; color: #f0f6fc; margin-bottom: 4px; }
+  .header h2 { font-size: 16px; color: #8b949e; font-weight: 400; margin-bottom: 16px; }
+  .header .meta { display: flex; justify-content: center; gap: 32px; font-size: 13px; color: #8b949e; flex-wrap: wrap; }
+  .nav-links { display: flex; justify-content: center; gap: 16px; margin-top: 16px; }
+  .nav-links a { color: #58a6ff; text-decoration: none; font-size: 13px; padding: 6px 14px; border: 1px solid #30363d; border-radius: 6px; transition: all 0.2s; }
+  .nav-links a:hover { background: #161b22; border-color: #58a6ff; }
+
+  /* Stats */
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 32px 0; }
+  .stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px; text-align: center; }
+  .stat-card .stat-label { font-size: 12px; color: #8b949e; margin-bottom: 6px; }
+  .stat-card .stat-value { font-size: 32px; font-weight: 700; }
+  .stat-total .stat-value { color: #f0f6fc; }
+  .stat-critical .stat-value { color: #f85149; }
+  .stat-high .stat-value { color: #d29922; }
+  .stat-medium .stat-value { color: #58a6ff; }
+  .stat-low .stat-value { color: #8b949e; }
+
+  /* Severity bar */
+  .severity-bar { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px 24px; margin: 24px 0; }
+  .severity-bar h3 { font-size: 15px; color: #f0f6fc; margin-bottom: 12px; }
+  .bar-track { height: 10px; background: #21262d; border-radius: 5px; overflow: hidden; display: flex; }
+  .bar-critical { background: #f85149; }
+  .bar-high { background: #d29922; }
+  .bar-medium { background: #58a6ff; }
+  .bar-low { background: #484f58; }
+  .bar-legend { display: flex; gap: 20px; margin-top: 10px; font-size: 12px; color: #8b949e; flex-wrap: wrap; }
+  .bar-legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .bar-legend .leg-critical::before { background: #f85149; }
+  .bar-legend .leg-high::before { background: #d29922; }
+  .bar-legend .leg-medium::before { background: #58a6ff; }
+  .bar-legend .leg-low::before { background: #484f58; }
+
+  /* Section */
+  .section-title { font-size: 18px; color: #f0f6fc; margin: 32px 0 16px; padding-bottom: 12px; border-bottom: 1px solid #21262d; }
+
+  /* Finding card */
+  .finding-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px 24px; margin-bottom: 16px; border-left: 4px solid #484f58; }
+  .finding-card.sev-critical { border-left-color: #f85149; }
+  .finding-card.sev-high { border-left-color: #d29922; }
+  .finding-card.sev-medium { border-left-color: #58a6ff; }
+  .finding-card.sev-low { border-left-color: #484f58; }
+  .finding-card-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .finding-num { font-size: 13px; color: #8b949e; font-weight: 600; min-width: 28px; padding-top: 2px; }
+  .finding-title { font-size: 15px; font-weight: 600; color: #f0f6fc; flex: 1; min-width: 200px; }
+  .finding-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .sev-badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .sev-badge.critical { background: #3d1214; color: #f85149; }
+  .sev-badge.high { background: #332d00; color: #d29922; }
+  .sev-badge.medium { background: #0c2d6b; color: #58a6ff; }
+  .sev-badge.low { background: #21262d; color: #8b949e; }
+  .cat-badge { background: #21262d; border: 1px solid #30363d; color: #8b949e; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+
+  /* Finding detail */
+  .finding-detail { margin-bottom: 12px; }
+  .finding-detail h4 { font-size: 12px; color: #8b949e; margin-bottom: 4px; font-weight: 600; }
+  .finding-detail p { font-size: 13px; color: #c9d1d9; line-height: 1.7; }
+  .finding-detail code { background: #0d1117; border: 1px solid #30363d; padding: 2px 6px; border-radius: 4px; font-family: 'SF Mono', Monaco, 'Cascadia Mono', monospace; font-size: 12px; color: #f0f6fc; }
+  .fix-block { background: #0d1117; border: 1px solid #30363d; padding: 14px; border-radius: 6px; overflow-x: auto; font-family: 'SF Mono', Monaco, 'Cascadia Mono', monospace; font-size: 0.9em; line-height: 1.5; white-space: pre-wrap; word-wrap: break-word; color: #7ee787; }
+
+  /* Recommendations */
+  .recommendations { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 28px; margin: 32px 0; }
+  .recommendations h3 { font-size: 18px; margin-bottom: 16px; color: #f0f6fc; }
+  .rec-item { display: flex; gap: 12px; margin-bottom: 14px; }
+  .rec-num { width: 28px; height: 28px; background: #1f6feb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .rec-text { font-size: 14px; color: #c9d1d9; }
+  .rec-text strong { color: #f0f6fc; }
+
+  .footer { text-align: center; padding: 40px 0; border-top: 1px solid #30363d; margin-top: 40px; }
+  .footer p { font-size: 12px; color: #8b949e; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Skills-Pages Audit</h1>
-            <p style="opacity:0.8">AISTORE Skills — AI Skill 发现平台</p>
-            <div class="meta-info">
-                <div class="meta-card"><strong>URL:</strong><br>https://aistore.club/zh/skills</div>
-                <div class="meta-card"><strong>Page Type:</strong><br>Homepage / Directory</div>
-                <div class="meta-card"><strong>Date:</strong><br>2026-04-10</div>
-                <div class="meta-card"><strong>Issues Found:</strong><br>12</div>
-            </div>
-        </header>
+<div class="container">
 
-        <div class="summary">
-            <h2>Summary</h2>
-            <div class="stats-grid">
-                <div class="stat-box"><div class="stat-number">3</div><div>Critical</div></div>
-                <div class="stat-box"><div class="stat-number">4</div><div>High</div></div>
-                <div class="stat-box"><div class="stat-number">4</div><div>Medium</div></div>
-                <div class="stat-box"><div class="stat-number">1</div><div>Low</div></div>
-            </div>
-        </div>
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">TestersAI</div>
+    <h1>Skills-Pages Audit</h1>
+    <h2>AISTORE Skills — AI Skill 发现平台</h2>
+    <div class="meta">
+      <span>URL: aistore.club/zh/skills</span>
+      <span>日期: 2026-04-10</span>
+      <span>12 项发现</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Persona Feedback 报告</a>
+      <a href="bug-report.html">Bug Detection 报告</a>
+      <a href="copywriting-seo-report.html">文案 & SEO 报告</a>
+      <a href="content-seo-audit.html">内容 & SEO 审计报告</a>
+      <a href="wiki-content-seo-audit.html">Wiki 内容 & SEO 审计报告</a>
+    </div>
+  </div>
 
-        <h2 style="margin-bottom:18px">Findings</h2>
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card stat-total">
+      <div class="stat-label">总计 Issues</div>
+      <div class="stat-value">12</div>
+    </div>
+    <div class="stat-card stat-critical">
+      <div class="stat-label">Critical</div>
+      <div class="stat-value">3</div>
+    </div>
+    <div class="stat-card stat-high">
+      <div class="stat-label">High</div>
+      <div class="stat-value">4</div>
+    </div>
+    <div class="stat-card stat-medium">
+      <div class="stat-label">Medium</div>
+      <div class="stat-value">4</div>
+    </div>
+    <div class="stat-card stat-low">
+      <div class="stat-label">Low</div>
+      <div class="stat-value">1</div>
+    </div>
+  </div>
 
-        <div class="issue-card critical">
-            <div class="issue-header">
-                <h3 class="issue-title">1. robots.txt 全站屏蔽搜索引擎爬虫</h3>
-                <div class="badges">
-                    <span class="badge badge-priority">Priority: 10/10</span>
-                    <span class="badge badge-confidence">Confidence: 10/10</span>
-                    <span class="badge badge-category">Technical SEO</span>
-                </div>
-            </div>
-            <div class="issue-section">
-                <h4>Why this matters</h4>
-                <p>当前 <code>robots.txt</code> 内容为 <code>User-Agent: *\nDisallow: /</code>，同时已生成的 <code>sitemap.xml</code> 也因为该规则无法被搜索引擎读取。这导致 Google、Bing 等爬虫被禁止抓取网站任何页面，一切自然搜索流量被完全切断。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Suggested fix</h4>
-                <p>立即删除 <code>Disallow: /</code>，在 <code>robots.txt</code> 底部添加 <code>Sitemap: https://aistore.club/sitemap.xml</code>，仅屏蔽不需要索引的路径（如 <code>/api/*</code>）。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Fix Prompt</h4>
-                <pre class="fix-block">Rewrite robots.txt to:
+  <!-- Severity bar -->
+  <div class="severity-bar">
+    <h3>严重度分布</h3>
+    <div class="bar-track">
+      <div class="bar-critical" style="width:25%"></div>
+      <div class="bar-high" style="width:33.3%"></div>
+      <div class="bar-medium" style="width:33.3%"></div>
+      <div class="bar-low" style="width:8.4%"></div>
+    </div>
+    <div class="bar-legend">
+      <span class="leg-critical">Critical (3) — 致命问题</span>
+      <span class="leg-high">High (4) — 严重问题</span>
+      <span class="leg-medium">Medium (4) — 中等问题</span>
+      <span class="leg-low">Low (1) — 轻微问题</span>
+    </div>
+  </div>
+
+  <!-- Findings -->
+  <h3 class="section-title">详细发现</h3>
+
+  <!-- #1 -->
+  <div class="finding-card sev-critical">
+    <div class="finding-card-header">
+      <div class="finding-num">#1</div>
+      <div class="finding-title">robots.txt 全站屏蔽搜索引擎爬虫</div>
+      <div class="finding-badges">
+        <span class="sev-badge critical">Priority: 10/10</span>
+        <span class="cat-badge">Technical SEO</span>
+      </div>
+    </div>
+    <div class="finding-detail">
+      <h4>问题描述</h4>
+      <p>当前 <code>robots.txt</code> 内容为 <code>User-Agent: *\nDisallow: /</code>，同时已生成的 <code>sitemap.xml</code> 也因为该规则无法被搜索引擎读取。这导致 Google、Bing 等爬虫被禁止抓取网站任何页面，一切自然搜索流量被完全切断。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复建议</h4>
+      <p>立即删除 <code>Disallow: /</code>，在 <code>robots.txt</code> 底部添加 <code>Sitemap: https://aistore.club/sitemap.xml</code>，仅屏蔽不需要索引的路径（如 <code>/api/*</code>）。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复代码</h4>
+      <pre class="fix-block">Rewrite robots.txt to:
 
 User-Agent: *
 Allow: /
@@ -183,56 +177,58 @@ Sitemap: https://aistore.club/sitemap.xml
 Optional disallows:
 Disallow: /api/
 Disallow: /_next/static/</pre>
-            </div>
-        </div>
+    </div>
+  </div>
 
-        <div class="issue-card critical">
-            <div class="issue-header">
-                <h3 class="issue-title">2. Canonical 标签与 Hreflang 双重指向错误</h3>
-                <div class="badges">
-                    <span class="badge badge-priority">Priority: 10/10</span>
-                    <span class="badge badge-confidence">Confidence: 10/10</span>
-                    <span class="badge badge-category">On-Page SEO</span>
-                </div>
-            </div>
-            <div class="issue-section">
-                <h4>Why this matters</h4>
-                <p>页面 URL 为 <code>/zh/skills</code>，但 canonical 指向了 <code>https://aistore.club/zh</code>（首页），这会让搜索引擎忽略该 skills 列表页，将所有权重合并到首页。同时 hreflang（<code>zh</code> → <code>/zh</code>、<code>en</code> → <code>/en</code>）也与当前 URL <code>/zh/skills</code> 不一致，进一步加剧索引混乱。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Suggested fix</h4>
-                <p>将 canonical 改为 self-referencing：指向 <code>/zh/skills</code> 自身；英文版 <code>/en/skills</code> 同理。同时同步调整 hreflang 指向对应语言的 skills 页URL。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Fix Prompt</h4>
-                <pre class="fix-block">For /zh/skills:
+  <!-- #2 -->
+  <div class="finding-card sev-critical">
+    <div class="finding-card-header">
+      <div class="finding-num">#2</div>
+      <div class="finding-title">Canonical 标签与 Hreflang 双重指向错误</div>
+      <div class="finding-badges">
+        <span class="sev-badge critical">Priority: 10/10</span>
+        <span class="cat-badge">On-Page SEO</span>
+      </div>
+    </div>
+    <div class="finding-detail">
+      <h4>问题描述</h4>
+      <p>页面 URL 为 <code>/zh/skills</code>，但 canonical 指向了 <code>https://aistore.club/zh</code>（首页），这会让搜索引擎忽略该 skills 列表页，将所有权重合并到首页。同时 hreflang（<code>zh</code> &rarr; <code>/zh</code>、<code>en</code> &rarr; <code>/en</code>）也与当前 URL <code>/zh/skills</code> 不一致，进一步加剧索引混乱。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复建议</h4>
+      <p>将 canonical 改为 self-referencing：指向 <code>/zh/skills</code> 自身；英文版 <code>/en/skills</code> 同理。同时同步调整 hreflang 指向对应语言的 skills 页 URL。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复代码</h4>
+      <pre class="fix-block">For /zh/skills:
 &lt;link rel="canonical" href="https://aistore.club/zh/skills" /&gt;
 &lt;link rel="alternate" hrefLang="zh" href="https://aistore.club/zh/skills" /&gt;
 &lt;link rel="alternate" hrefLang="en" href="https://aistore.club/en/skills" /&gt;
 &lt;link rel="alternate" hrefLang="x-default" href="https://aistore.club/zh/skills" /&gt;</pre>
-            </div>
-        </div>
+    </div>
+  </div>
 
-        <div class="issue-card critical">
-            <div class="issue-header">
-                <h3 class="issue-title">3. 首屏统计数据客户端渲染导致显示 "0+"</h3>
-                <div class="badges">
-                    <span class="badge badge-priority">Priority: 9/10</span>
-                    <span class="badge badge-confidence">Confidence: 10/10</span>
-                    <span class="badge badge-category">Content / UX</span>
-                </div>
-            </div>
-            <div class="issue-section">
-                <h4>Why this matters</h4>
-                <p>页面源码中的 stats 初始显示为 <code>0+ Skills 总量</code>、<code>0+ 作者总量</code>、<code>0+ 本周新增</code>，真实数据（1000 / 599）依赖客户端 JS 请求 API 后填充。这不仅给搜索引擎爬虫留下空白/误导性内容，也严重削弱了首屏用户的信任感。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Suggested fix</h4>
-                <p>通过 Next.js SSR / SSG / ISR 在服务端将真实统计数据直接注入 HTML 中，确保爬虫和无 JS 用户首屏即可看到 <code>1000+</code> 和 <code>599+</code>。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Fix Prompt</h4>
-                <pre class="fix-block">Pass real stats as initial props during SSR:
+  <!-- #3 -->
+  <div class="finding-card sev-critical">
+    <div class="finding-card-header">
+      <div class="finding-num">#3</div>
+      <div class="finding-title">首屏统计数据客户端渲染导致显示 "0+"</div>
+      <div class="finding-badges">
+        <span class="sev-badge critical">Priority: 9/10</span>
+        <span class="cat-badge">Content / UX</span>
+      </div>
+    </div>
+    <div class="finding-detail">
+      <h4>问题描述</h4>
+      <p>页面源码中的 stats 初始显示为 <code>0+ Skills 总量</code>、<code>0+ 作者总量</code>、<code>0+ 本周新增</code>，真实数据（1000 / 599）依赖客户端 JS 请求 API 后填充。这不仅给搜索引擎爬虫留下空白/误导性内容，也严重削弱了首屏用户的信任感。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复建议</h4>
+      <p>通过 Next.js SSR / SSG / ISR 在服务端将真实统计数据直接注入 HTML 中，确保爬虫和无 JS 用户首屏即可看到 <code>1000+</code> 和 <code>599+</code>。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复代码</h4>
+      <pre class="fix-block">Pass real stats as initial props during SSR:
 
 { stats: { totalSkills: 1000, totalAuthors: 599, weeklyNew: 12 } }
 
@@ -240,57 +236,59 @@ Render directly in HTML:
 &lt;div&gt;1000+ Skills 总量&lt;/div&gt;
 &lt;div&gt;599+ 作者总量&lt;/div&gt;
 &lt;div&gt;12+ 本周新增&lt;/div&gt;</pre>
-            </div>
-        </div>
+    </div>
+  </div>
 
-        <div class="issue-card high">
-            <div class="issue-header">
-                <h3 class="issue-title">4. 零缓存策略 + TTFB 1.28s，性能基础薄弱</h3>
-                <div class="badges">
-                    <span class="badge badge-priority">Priority: 8/10</span>
-                    <span class="badge badge-confidence">Confidence: 10/10</span>
-                    <span class="badge badge-category">Technical SEO</span>
-                </div>
-            </div>
-            <div class="issue-section">
-                <h4>Why this matters</h4>
-                <p>响应头中设置了 <code>Cache-Control: private, no-cache, no-store, max-age=0, must-revalidate</code>，导致 Cloudflare 等 CDN 缓存完全无法命中，所有请求都打回源站。实测 TTFB 为 1.284s，总加载时间 1.86s， adversely affects Core Web Vitals 和搜索排名。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Suggested fix</h4>
-                <p>对静态/半静态页面启用 Next.js ISR (Incremental Static Regeneration) 或合理 CDN 缓存策略（如 <code>s-maxage=60, stale-while-revalidate=86400</code>），降低首字节响应时间。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Fix Prompt</h4>
-                <pre class="fix-block">Enable ISR with a 60-second revalidation window:
+  <!-- #4 -->
+  <div class="finding-card sev-high">
+    <div class="finding-card-header">
+      <div class="finding-num">#4</div>
+      <div class="finding-title">零缓存策略 + TTFB 1.28s，性能基础薄弱</div>
+      <div class="finding-badges">
+        <span class="sev-badge high">Priority: 8/10</span>
+        <span class="cat-badge">Technical SEO</span>
+      </div>
+    </div>
+    <div class="finding-detail">
+      <h4>问题描述</h4>
+      <p>响应头中设置了 <code>Cache-Control: private, no-cache, no-store, max-age=0, must-revalidate</code>，导致 Cloudflare 等 CDN 缓存完全无法命中，所有请求都打回源站。实测 TTFB 为 1.284s，总加载时间 1.86s，影响 Core Web Vitals 和搜索排名。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复建议</h4>
+      <p>对静态/半静态页面启用 Next.js ISR 或合理 CDN 缓存策略（如 <code>s-maxage=60, stale-while-revalidate=86400</code>），降低首字节响应时间。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复代码</h4>
+      <pre class="fix-block">Enable ISR with a 60-second revalidation window:
 
 export const revalidate = 60;
 
 Set cache headers for semi-static content:
 Cache-Control: public, s-maxage=60, stale-while-revalidate=86400</pre>
-            </div>
-        </div>
+    </div>
+  </div>
 
-        <div class="issue-card high">
-            <div class="issue-header">
-                <h3 class="issue-title">5. 无独立 Skill 详情页，且缺少内部链接入口</h3>
-                <div class="badges">
-                    <span class="badge badge-priority">Priority: 8/10</span>
-                    <span class="badge badge-confidence">Confidence: 9/10</span>
-                    <span class="badge badge-category">Content Structure</span>
-                </div>
-            </div>
-            <div class="issue-section">
-                <h4>Why this matters</h4>
-                <p>HTML 源码中只有 15 个导航级内部链接，没有任何指向单个 skill 的 <code>&lt;a&gt;</code> 链接。1000 个 skills 均通过客户端 API 渲染，且探测发现 <code>/skills/{id}</code> 等详情页路径均返回 404。这意味着所有 skill 的长尾搜索潜力（如 "GitHub 集成 skill"、"Claude 摘要工具"）都被浪费。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Suggested fix</h4>
-                <p>立即为每个 skill 生成可独立访问的详情页（建议 URL: <code>/zh/skills/{publicId}</code> 或 <code>/{sourceSlug}/{nameSlug}</code>）。同时在列表页 SSR 输出至少 Top 12 个 skill 的 HTML 锚点链接，供搜索引擎发现和索引。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Fix Prompt</h4>
-                <pre class="fix-block">Generate static detail pages for every skill:
+  <!-- #5 -->
+  <div class="finding-card sev-high">
+    <div class="finding-card-header">
+      <div class="finding-num">#5</div>
+      <div class="finding-title">无独立 Skill 详情页，且缺少内部链接入口</div>
+      <div class="finding-badges">
+        <span class="sev-badge high">Priority: 8/10</span>
+        <span class="cat-badge">Content Structure</span>
+      </div>
+    </div>
+    <div class="finding-detail">
+      <h4>问题描述</h4>
+      <p>HTML 源码中只有 15 个导航级内部链接，没有任何指向单个 skill 的 <code>&lt;a&gt;</code> 链接。1000 个 skills 均通过客户端 API 渲染，且 <code>/skills/{id}</code> 等详情页路径均返回 404。所有 skill 的长尾搜索潜力被浪费。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复建议</h4>
+      <p>为每个 skill 生成可独立访问的详情页（建议 URL: <code>/zh/skills/{publicId}</code>）。同时在列表页 SSR 输出至少 Top 12 个 skill 的 HTML 锚点链接。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复代码</h4>
+      <pre class="fix-block">Generate static detail pages for every skill:
 
 URL pattern: /zh/skills/{publicId}
 
@@ -299,79 +297,82 @@ SSR-render the top 12 cards with real anchor links:
   &lt;h3&gt;自我改进智能体&lt;/h3&gt;
   &lt;p&gt;记录学习过程、错误及修正措施...&lt;/p&gt;
 &lt;/a&gt;</pre>
-            </div>
-        </div>
+    </div>
+  </div>
 
-        <div class="issue-card high">
-            <div class="issue-header">
-                <h3 class="issue-title">6. Title 标签过短，浪费 SERP 展示空间</h3>
-                <div class="badges">
-                    <span class="badge badge-priority">Priority: 7/10</span>
-                    <span class="badge badge-confidence">Confidence: 10/10</span>
-                    <span class="badge badge-category">On-Page SEO</span>
-                </div>
-            </div>
-            <div class="issue-section">
-                <h4>Why this matters</h4>
-                <p>当前 Title 为 <code>发现优质 AI Skills - AISTORE</code>（仅 24 字符），远低于搜索结果显示的 55-60 字符上限。未充分利用空间展示数量优势、平台定位（AI App Store）等能提升点击率的信息。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Suggested fix</h4>
-                <p>扩展 Title 长度，融入核心关键词（AI Skills、AISTORE）和差异化卖点（1000+、AI App Store）。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Fix Prompt</h4>
-                <pre class="fix-block">Rewrite title tag to 55-60 characters:
+  <!-- #6 -->
+  <div class="finding-card sev-high">
+    <div class="finding-card-header">
+      <div class="finding-num">#6</div>
+      <div class="finding-title">Title 标签过短，浪费 SERP 展示空间</div>
+      <div class="finding-badges">
+        <span class="sev-badge high">Priority: 7/10</span>
+        <span class="cat-badge">On-Page SEO</span>
+      </div>
+    </div>
+    <div class="finding-detail">
+      <h4>问题描述</h4>
+      <p>当前 Title 为 <code>发现优质 AI Skills - AISTORE</code>（仅 24 字符），远低于搜索结果显示的 55-60 字符上限。未充分利用空间展示数量优势、平台定位等能提升点击率的信息。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复建议</h4>
+      <p>扩展 Title 长度，融入核心关键词（AI Skills、AISTORE）和差异化卖点（1000+、AI App Store）。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复代码</h4>
+      <pre class="fix-block">Rewrite title tag to 55-60 characters:
 
 发现 1000+ AI Skills | AISTORE - AI 时代的 App Store</pre>
-            </div>
-        </div>
+    </div>
+  </div>
 
-        <div class="issue-card high">
-            <div class="issue-header">
-                <h3 class="issue-title">7. Meta Description 过短，缺少行动号召</h3>
-                <div class="badges">
-                    <span class="badge badge-priority">Priority: 7/10</span>
-                    <span class="badge badge-confidence">Confidence: 10/10</span>
-                    <span class="badge badge-category">On-Page SEO</span>
-                </div>
-            </div>
-            <div class="issue-section">
-                <h4>Why this matters</h4>
-                <p>Meta description 仅有 50 个字符，描述停在了平台定位层面，没有延伸至用户利益点（如覆盖 9 大分类、VirusTotal 安全扫描）和明确的 Call to Action，CTR 优化不足。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Suggested fix</h4>
-                <p>重写至 150-160 字符，加入统计数据、热门分类和明确行动引导语。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Fix Prompt</h4>
-                <pre class="fix-block">Write a compelling 150-160 char meta description:
+  <!-- #7 -->
+  <div class="finding-card sev-high">
+    <div class="finding-card-header">
+      <div class="finding-num">#7</div>
+      <div class="finding-title">Meta Description 过短，缺少行动号召</div>
+      <div class="finding-badges">
+        <span class="sev-badge high">Priority: 7/10</span>
+        <span class="cat-badge">On-Page SEO</span>
+      </div>
+    </div>
+    <div class="finding-detail">
+      <h4>问题描述</h4>
+      <p>Meta description 仅有 50 个字符，描述停在了平台定位层面，没有延伸至用户利益点和明确的 Call to Action，CTR 优化不足。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复建议</h4>
+      <p>重写至 150-160 字符，加入统计数据、热门分类和明确行动引导语。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复代码</h4>
+      <pre class="fix-block">Write a compelling 150-160 char meta description:
 
 AISTORE 收录 1000+ 优质 AI Skills、MCP 与 Agent 工具，覆盖开发工具、内容创作、自动化工作流等 9 大分类。浏览热门技能，安全下载安装。</pre>
-            </div>
-        </div>
+    </div>
+  </div>
 
-        <div class="issue-card medium">
-            <div class="issue-header">
-                <h3 class="issue-title">8. Heading 层级过浅，语义结构缺失</h3>
-                <div class="badges">
-                    <span class="badge badge-priority medium">Priority: 5/10</span>
-                    <span class="badge badge-confidence">Confidence: 9/10</span>
-                    <span class="badge badge-category">Content Structure</span>
-                </div>
-            </div>
-            <div class="issue-section">
-                <h4>Why this matters</h4>
-                <p>页面仅有 1 个 H1（发现优质 AI Skills）和 1 个 H2。对于承载 1000 个 skills 和 9 大分类的目录页面而言，这个结构过于单薄，搜索引擎难以通过 heading 理解页面内容的组织深度。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Suggested fix</h4>
-                <p>为分类区块和热门技能列表补充 H2/H3 标签，构建 <code>H1 → H2 → H3</code> 的清晰语义层级。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Fix Prompt</h4>
-                <pre class="fix-block">Add heading hierarchy:
+  <!-- #8 -->
+  <div class="finding-card sev-medium">
+    <div class="finding-card-header">
+      <div class="finding-num">#8</div>
+      <div class="finding-title">Heading 层级过浅，语义结构缺失</div>
+      <div class="finding-badges">
+        <span class="sev-badge medium">Priority: 5/10</span>
+        <span class="cat-badge">Content Structure</span>
+      </div>
+    </div>
+    <div class="finding-detail">
+      <h4>问题描述</h4>
+      <p>页面仅有 1 个 H1 和 1 个 H2。对于承载 1000 个 skills 和 9 大分类的目录页面而言，这个结构过于单薄，搜索引擎难以通过 heading 理解页面内容的组织深度。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复建议</h4>
+      <p>为分类区块和热门技能列表补充 H2/H3 标签，构建 <code>H1 &rarr; H2 &rarr; H3</code> 的清晰语义层级。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复代码</h4>
+      <pre class="fix-block">Add heading hierarchy:
 
 H1: 发现优质 AI Skills
   H2: 热门分类
@@ -381,83 +382,86 @@ H1: 发现优质 AI Skills
   H2: 热门 Skills
     H3: 自我改进智能体
     H3: 智能摘要</pre>
-            </div>
-        </div>
+    </div>
+  </div>
 
-        <div class="issue-card medium">
-            <div class="issue-header">
-                <h3 class="issue-title">9. 缺少安全响应头，可信度基准不足</h3>
-                <div class="badges">
-                    <span class="badge badge-priority medium">Priority: 4/10</span>
-                    <span class="badge badge-confidence">Confidence: 10/10</span>
-                    <span class="badge badge-category">Technical SEO</span>
-                </div>
-            </div>
-            <div class="issue-section">
-                <h4>Why this matters</h4>
-                <p>响应头中未配置 <code>Strict-Transport-Security</code>、<code>X-Content-Type-Options</code>、<code>X-Frame-Options</code> 等基础安全头部。虽不直接决定排名，但会影响 EEAT 中的 Trustworthiness 信号和安全审计评分。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Suggested fix</h4>
-                <p>在 Cloudflare Transform Rules 或源站服务器上添加标准安全响应头。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Fix Prompt</h4>
-                <pre class="fix-block">Add the following response headers:
+  <!-- #9 -->
+  <div class="finding-card sev-medium">
+    <div class="finding-card-header">
+      <div class="finding-num">#9</div>
+      <div class="finding-title">缺少安全响应头，可信度基准不足</div>
+      <div class="finding-badges">
+        <span class="sev-badge medium">Priority: 4/10</span>
+        <span class="cat-badge">Technical SEO</span>
+      </div>
+    </div>
+    <div class="finding-detail">
+      <h4>问题描述</h4>
+      <p>响应头中未配置 <code>Strict-Transport-Security</code>、<code>X-Content-Type-Options</code>、<code>X-Frame-Options</code> 等基础安全头部。影响 EEAT 中的 Trustworthiness 信号和安全审计评分。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复建议</h4>
+      <p>在 Cloudflare Transform Rules 或源站服务器上添加标准安全响应头。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复代码</h4>
+      <pre class="fix-block">Add the following response headers:
 
 Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 X-Content-Type-Options: nosniff
 X-Frame-Options: DENY
 Referrer-Policy: strict-origin-when-cross-origin</pre>
-            </div>
-        </div>
+    </div>
+  </div>
 
-        <div class="issue-card medium">
-            <div class="issue-header">
-                <h3 class="issue-title">10. Hero 区域缺少即时信任信号</h3>
-                <div class="badges">
-                    <span class="badge badge-priority medium">Priority: 4/10</span>
-                    <span class="badge badge-confidence">Confidence: 8/10</span>
-                    <span class="badge badge-category">Conversion / CRO</span>
-                </div>
-            </div>
-            <div class="issue-section">
-                <h4>Why this matters</h4>
-                <p>虽然平台拥有很强的数据资产（1000 skills、599 作者、VirusTotal 安全扫描），但这些信任要素没有出现在 Hero/首屏区域，新访客无法在 5 秒内建立对平台的权威感和安全感。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Suggested fix</h4>
-                <p>在 Hero 副标题或搜索栏下方添加一行 trust bar，用 3-4 个简洁徽章展示平台核心背书信息。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Fix Prompt</h4>
-                <pre class="fix-block">Add a trust bar below the hero subtitle:
+  <!-- #10 -->
+  <div class="finding-card sev-medium">
+    <div class="finding-card-header">
+      <div class="finding-num">#10</div>
+      <div class="finding-title">Hero 区域缺少即时信任信号</div>
+      <div class="finding-badges">
+        <span class="sev-badge medium">Priority: 4/10</span>
+        <span class="cat-badge">Conversion / CRO</span>
+      </div>
+    </div>
+    <div class="finding-detail">
+      <h4>问题描述</h4>
+      <p>虽然平台拥有很强的数据资产（1000 skills、599 作者、VirusTotal 安全扫描），但这些信任要素没有出现在 Hero/首屏区域，新访客无法在 5 秒内建立对平台的权威感和安全感。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复建议</h4>
+      <p>在 Hero 副标题或搜索栏下方添加一行 trust bar，用 3-4 个简洁徽章展示平台核心背书信息。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复代码</h4>
+      <pre class="fix-block">Add a trust bar below the hero subtitle:
 
 ✓ 1000+ 经 VirusTotal 安全扫描  ✓ 599 位活跃开发者
 ✓ 覆盖 9 大热门领域  ✓ 中英双语支持</pre>
-            </div>
-        </div>
+    </div>
+  </div>
 
-        <div class="issue-card low">
-            <div class="issue-header">
-                <h3 class="issue-title">11. Schema 类型单一，缺少 Skill 级结构化数据</h3>
-                <div class="badges">
-                    <span class="badge badge-priority low">Priority: 3/10</span>
-                    <span class="badge badge-confidence">Confidence: 10/10</span>
-                    <span class="badge badge-category">Technical SEO</span>
-                </div>
-            </div>
-            <div class="issue-section">
-                <h4>Why this matters</h4>
-                <p>页面仅包含一个 <code>WebSite</code> 类型的 JSON-LD Schema（含 SearchAction），但没有为 skills 列表添加 <code>ItemList</code> 或为单个 skill 添加 <code>SoftwareApplication</code> schema，错失了富媒体摘要和 AI Search 引用机会。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Suggested fix</h4>
-                <p>为每个 skill 卡片注入 <code>SoftwareApplication</code> schema（包含名称、作者、aggregateRating / 安装量、下载链接），并将列表容器声明为 <code>ItemList</code>。</p>
-            </div>
-            <div class="issue-section">
-                <h4>Fix Prompt</h4>
-                <pre class="fix-block">Add SoftwareApplication schema for each skill:
+  <!-- #11 -->
+  <div class="finding-card sev-low">
+    <div class="finding-card-header">
+      <div class="finding-num">#11</div>
+      <div class="finding-title">Schema 类型单一，缺少 Skill 级结构化数据</div>
+      <div class="finding-badges">
+        <span class="sev-badge low">Priority: 3/10</span>
+        <span class="cat-badge">Technical SEO</span>
+      </div>
+    </div>
+    <div class="finding-detail">
+      <h4>问题描述</h4>
+      <p>页面仅包含一个 <code>WebSite</code> 类型的 JSON-LD Schema（含 SearchAction），但没有为 skills 列表添加 <code>ItemList</code> 或为单个 skill 添加 <code>SoftwareApplication</code> schema，错失了富媒体摘要和 AI Search 引用机会。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复建议</h4>
+      <p>为每个 skill 卡片注入 <code>SoftwareApplication</code> schema（包含名称、作者、aggregateRating / 安装量、下载链接），并将列表容器声明为 <code>ItemList</code>。</p>
+    </div>
+    <div class="finding-detail">
+      <h4>修复代码</h4>
+      <pre class="fix-block">Add SoftwareApplication schema for each skill:
 
 {
   "@context": "https://schema.org",
@@ -472,21 +476,32 @@ Referrer-Policy: strict-origin-when-cross-origin</pre>
   },
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
 }</pre>
-            </div>
-        </div>
-
-        <div class="recommendations">
-            <h2>Top Recommendations</h2>
-            <ol>
-                <li><strong>修复 robots.txt：</strong>这是唯一且致命的流量阻断点，删除 <code>Disallow: /</code> 即可让搜索引擎开始爬取。</li>
-                <li><strong>修正 canonical 与 hreflang：</strong>让 <code>/zh/skills</code> 和 <code>/en/skills</code> 拥有独立的 self-referencing canonical，释放长尾 SEO 潜力。</li>
-                <li><strong>SSR 真实数据与详情页链接：</strong>在服务端渲染 stats（1000+/599+），并为每个 skill 建立独立可索引的 HTML 详情页，在列表页输出真实锚点链接。</li>
-            </ol>
-        </div>
-
-        <footer>
-            <p>Generated by Claude · Content & SEO Auditor Skill</p>
-        </footer>
     </div>
+  </div>
+
+  <!-- Recommendations -->
+  <div class="recommendations">
+    <h3>Top 改进建议</h3>
+    <div class="rec-item">
+      <div class="rec-num">1</div>
+      <div class="rec-text"><strong>修复 robots.txt：</strong>这是唯一且致命的流量阻断点，删除 <code>Disallow: /</code> 即可让搜索引擎开始爬取。</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num">2</div>
+      <div class="rec-text"><strong>修正 canonical 与 hreflang：</strong>让 <code>/zh/skills</code> 和 <code>/en/skills</code> 拥有独立的 self-referencing canonical，释放长尾 SEO 潜力。</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num">3</div>
+      <div class="rec-text"><strong>SSR 真实数据与详情页链接：</strong>在服务端渲染 stats（1000+/599+），并为每个 skill 建立独立可索引的 HTML 详情页，在列表页输出真实锚点链接。</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Generated by TestersAI &bull; Content & SEO Audit &bull; 2026-04-10</p>
+    <p style="margin-top:4px;">Powered by Content &amp; SEO Auditor Skill &bull; Local Analysis</p>
+  </div>
+
+</div>
 </body>
 </html>
